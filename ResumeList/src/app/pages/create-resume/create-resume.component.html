@@ -1,0 +1,96 @@
+<div class="container">
+    <h2 class="emp-title">Create Task</h2>
+    <div [formGroup]="resumeForm" class="emp-form">
+        <div class="emp-info">
+            <div class="extra">
+                <mat-label> Name: </mat-label>
+                <mat-form-field class="form-group" appearance="outline">
+                    <input matInput type="text" formControlName="name" placeholder="Enter Name">
+                    <mat-error *ngIf="myForm['name'].hasError('required')">Name is required</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="extra">
+                <mat-label>Email Address: </mat-label>
+                <mat-form-field class="form-group" appearance="outline">
+                    <input matInput type="email" formControlName="email" placeholder="Email Address">
+                    <mat-error *ngIf="myForm['email'].hasError('required')">Email address is required</mat-error>
+                    <mat-error *ngIf="myForm['email'].hasError('pattern')">Please enter a valid email</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="extra">
+                <mat-label>Phone: </mat-label>
+                <mat-form-field class="form-group" appearance="outline">
+                    <input matInput type="text" formControlName="phone" (keypress)="keyPress($event)"
+                        placeholder="Phone">
+                    <mat-error *ngIf="myForm['phone'].hasError('required')">Phone is required</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div cdkDropList (cdkDropListDropped)="drop($event)" class="example-list">
+            <ng-container formArrayName="education"
+                *ngFor="let educationForm of education.controls; let i = index">
+
+                <div class="example-box" [formGroupName]="i" cdkDrag>
+                    <mat-card>
+                        <div class="extra">
+                            <mat-form-field class="form-group" appearance="outline">
+                                <mat-label>University: </mat-label>
+                                <input matInput type="text" formControlName="task" placeholder="University Name">
+                                <mat-error *ngIf="educationcon(i).controls['task'].hasError('required')">Task is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="extra">
+                            <mat-form-field class="form-group" appearance="outline">
+                                <mat-label>Start Date : </mat-label>
+                                <input matInput [matDatepicker]="picker1" formControlName="startDate"
+                                    placeholder="Start Date" name="startDate" [max]="today">
+                                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                                <mat-error *ngIf="educationcon(i).controls['startDate'].hasError('required')">Start Date is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="extra">                          
+                            <mat-form-field class="form-group" appearance="outline">
+                                <mat-label>End Date : </mat-label>
+                                <input matInput [matDatepicker]="picker2" formControlName="endDate"
+                                    placeholder="End Date" name="endDate" [max]="today">
+                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                                <mat-error *ngIf="educationcon(i).controls['endDate'].hasError('required')">End Date is required</mat-error>
+                                <mat-error *ngIf="educationcon(i).controls['endDate'].hasError('dateValid')">End Date must be greater than  start Date</mat-error>
+                            </mat-form-field>
+                        </div>
+                        
+                        <div class="extra">
+                            <mat-form-field class="form-group" appearance="fill">
+                                <mat-label>Choose Status: </mat-label>
+                                <mat-select formControlName="status" placeholder="Select Status">
+                                    <mat-option value="certificate">Certificate</mat-option>
+                                    <mat-option value="diploma">Diploma</mat-option>
+                                    <mat-option value="bechelor">Bechelor</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="extra" *ngIf="i !== 0">
+                            <mat-icon class="delete-btn" color="warn" (click)="deleteEducation(i)">
+                                delete_forever</mat-icon>
+                        </div>
+                    </mat-card>
+                </div>
+            </ng-container>
+        </div>
+
+        <button mat-mini-fab (click)="addEducation()">
+            <mat-icon class="add-course-btn">add</mat-icon>
+        </button>
+
+        <div class="button-group">
+            <button mat-flat-button type="button" [disabled]="resumeForm.invalid" (click)="createEducation()"
+                color="primary" class="btn-submit">Create</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+.container {
+    width: 60%;
+    margin: 30px auto;
+
+    .title{
+        text-align: center;
+    }
+
+    .table-container {
+        width: 100%;
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 1em;
+            border-radius: 5px;
+
+            th {
+                padding: 5px 0;
+                text-align: center;
+                background-color: #8a2be2;
+                color: #ffffff;
+            }
+
+            td {
+                padding: 5px 0;
+                text-align: center;
+            }
+        }
+
+        .edit-btn{
+           display: flex;
+           justify-content: center;
+
+            .btn{
+                padding: 0px 80px;
+                margin-top: 25px;
+            }
+        }
+    }
+}
