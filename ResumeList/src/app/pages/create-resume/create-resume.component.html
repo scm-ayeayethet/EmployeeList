@@ -1,5 +1,5 @@
 <div class="container">
-    <h2 class="emp-title">Create Task</h2>
+    <h2 class="emp-title">{{ pageTitle }}</h2>
     <div [formGroup]="resumeForm" class="emp-form">
         <div class="emp-info">
             <div class="extra">
@@ -29,16 +29,16 @@
             </div>
         </div>
         <div cdkDropList (cdkDropListDropped)="drop($event)" class="example-list">
-            <ng-container formArrayName="education"
-                *ngFor="let educationForm of education.controls; let i = index">
-
-                <div class="example-box" [formGroupName]="i" cdkDrag>
+            <ng-container formArrayName="education">
+                <div class="example-box" *ngFor="let educationForm of education.controls ; let i = index"
+                    [formGroupName]="i" cdkDrag>
                     <mat-card>
                         <div class="extra">
                             <mat-form-field class="form-group" appearance="outline">
                                 <mat-label>University: </mat-label>
                                 <input matInput type="text" formControlName="task" placeholder="University Name">
-                                <mat-error *ngIf="educationcon(i).controls['task'].hasError('required')">Task is required</mat-error>
+                                <mat-error *ngIf="educationcon(i).controls['task'].hasError('required')">Task is
+                                    required</mat-error>
                             </mat-form-field>
                         </div>
                         <div class="extra">
@@ -48,22 +48,25 @@
                                     placeholder="Start Date" name="startDate" [max]="today">
                                 <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                                 <mat-datepicker #picker1></mat-datepicker>
-                                <mat-error *ngIf="educationcon(i).controls['startDate'].hasError('required')">Start Date is required</mat-error>
+                                <mat-error *ngIf="educationcon(i).controls['startDate'].hasError('required')">Start Date
+                                    is required</mat-error>
                             </mat-form-field>
                         </div>
 
-                        <div class="extra">                          
+                        <div class="extra">
                             <mat-form-field class="form-group" appearance="outline">
                                 <mat-label>End Date : </mat-label>
                                 <input matInput [matDatepicker]="picker2" formControlName="endDate"
                                     placeholder="End Date" name="endDate" [max]="today">
                                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                                 <mat-datepicker #picker2></mat-datepicker>
-                                <mat-error *ngIf="educationcon(i).controls['endDate'].hasError('required')">End Date is required</mat-error>
-                                <mat-error *ngIf="educationcon(i).controls['endDate'].hasError('dateValid')">End Date must be greater than  start Date</mat-error>
+                                <mat-error *ngIf="educationcon(i).controls['endDate'].hasError('required')">End Date is
+                                    required</mat-error>
+                                <mat-error *ngIf="educationcon(i).controls['endDate'].hasError('dateValid')">End Date
+                                    must be greater than start Date</mat-error>
                             </mat-form-field>
                         </div>
-                        
+
                         <div class="extra">
                             <mat-form-field class="form-group" appearance="fill">
                                 <mat-label>Choose Status: </mat-label>

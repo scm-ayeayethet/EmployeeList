@@ -47,6 +47,10 @@ export class ResumeListComponent implements OnInit {
     this.router.navigate(['/create-resume']);
   }
 
+  editData(id:any) {
+    this.router.navigate(['/edit-resume/'+id]);
+  }
+
   deleteData(id: any) {
     let localData = localStorage.getItem('list') || '[]';
     let newList = JSON.parse(localData)

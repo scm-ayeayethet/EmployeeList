@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { dateValidator } from 'src/app/validators/custom-date.validator';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,12 +17,16 @@ export class CreateResumeComponent implements OnInit {
   resumeArr: any = [];
   formArray: any = [];
   educationList: any;
+  public pageTitle: string = 'Create Task';
+  public buttonname: string = 'Create';
+  confirmView: Boolean = false;
+  id: any;
 
   constructor(
     private fb: FormBuilder,
-    private router: Router) { }
-
-  ngOnInit(): void {
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.resumeForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
@@ -30,6 +34,32 @@ export class CreateResumeComponent implements OnInit {
       education: this.fb.array([this.edu()])
     });
     this.educationList = this.resumeForm.controls['education'] as FormArray;
+  }
+
+  ngOnInit(): void {
+    this.id = this.route.snapshot.params['id'];
+
+    if (this.router.url.indexOf('/edit-resume') !== -1 && this.id !== undefined) {
+      this.pageTitle = 'Edit Task';
+      this.buttonname = 'Update';
+
+      let lists = localStorage.getItem('list') || '[]';
+      let list = JSON.parse(lists);
+      let editList = list.filter((x: any) => x.id === this.id);
+      if (editList) {
+        const educations = this.resumeForm.get('education') as FormArray;
+        this.resumeForm.controls['name'].setValue(editList[0].name);
+        this.resumeForm.controls['email'].setValue(editList[0].email);
+        this.resumeForm.controls['phone'].setValue(editList[0].phone);
+        this.resumeForm.controls['education'].setValue(editList[0].education);
+        // editList.map((x: any) => {
+        // this.resumeForm.controls['education'].setValue(x.education);
+        // });
+        // this.resumeForm.setValue(editList);
+       // editList.education.forEach((edu: any) => educations.push(this.fb.group(edu)));
+        //editList.education.forEach((edu:any) => educations.push(this.fb.group(edu)));
+      }
+    }
   }
 
   get myForm() {
@@ -76,10 +106,10 @@ export class CreateResumeComponent implements OnInit {
 
   createEducation() {
     this.resumeArr = {
-      id : uuidv4(),
-      name : this.resumeForm.controls['name'].value,
-      email : this.resumeForm.controls['email'].value,
-      phone : this.resumeForm.controls['phone'].value,
+      id: uuidv4(),
+      name: this.resumeForm.controls['name'].value,
+      email: this.resumeForm.controls['email'].value,
+      phone: this.resumeForm.controls['phone'].value,
       education: this.resumeForm.controls['education'].value
     };
     let resume = localStorage.getItem('list') || '[]';

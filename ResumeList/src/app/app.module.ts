@@ -10,15 +10,13 @@ import { AppComponent } from './app.component';
 import { ResumeListComponent } from './pages/resume-list/resume-list.component';
 import { CreateResumeComponent } from './pages/create-resume/create-resume.component';
 import { DetailListComponent } from './pages/detail-list/detail-list.component';
-import { EditResumeComponent } from './pages/edit-resume/edit-resume.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ResumeListComponent,
     CreateResumeComponent,
-    DetailListComponent,
-    EditResumeComponent
+    DetailListComponent
   ],
   imports: [
     BrowserModule,

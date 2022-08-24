@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CreateResumeComponent } from './pages/create-resume/create-resume.component';
 import { DetailListComponent } from './pages/detail-list/detail-list.component';
-import { EditResumeComponent } from './pages/edit-resume/edit-resume.component';
 import { ResumeListComponent } from './pages/resume-list/resume-list.component';
 
 const routes: Routes = [
@@ -19,12 +18,12 @@ const routes: Routes = [
     component: CreateResumeComponent
   },
   {
-    path: 'detail/:id',
-    component:DetailListComponent
+    path: 'edit-resume/:id',
+    component : CreateResumeComponent
   },
   {
-    path: 'edit-resume/:id',
-    component : EditResumeComponent
+    path: 'detail/:id',
+    component:DetailListComponent
   }
 ];
 
