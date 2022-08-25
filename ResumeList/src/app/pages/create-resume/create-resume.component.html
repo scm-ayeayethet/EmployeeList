@@ -92,8 +92,9 @@
         </button>
 
         <div class="button-group">
-            <button mat-flat-button type="button" [disabled]="resumeForm.invalid" (click)="createEducation()"
-                color="primary" class="btn-submit">Create</button>
+            <button mat-flat-button type="button" [disabled]="resumeForm.invalid" (click)="createUpdateEducation()"
+                color="primary" class="btn-submit">{{confirmView === true ?
+                'Confirm' : buttonname}}</button>
         </div>
     </div>
 </div>

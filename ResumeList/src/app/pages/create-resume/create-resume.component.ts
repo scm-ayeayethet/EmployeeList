@@ -1,4 +1,6 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { throwDialogContentAlreadyAttachedError } from '@angular/cdk/dialog';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { emitDistinctChangesOnlyDefaultValue } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,27 +18,36 @@ export class CreateResumeComponent implements OnInit {
   today = new Date();
   resumeArr: any = [];
   formArray: any = [];
-  educationList: any;
+  educationForm: any;
   public pageTitle: string = 'Create Task';
   public buttonname: string = 'Create';
   confirmView: Boolean = false;
   id: any;
+  editList: any;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute
-  ) {
-    this.resumeForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
-      phone: ['', Validators.required],
-      education: this.fb.array([this.edu()])
-    });
-    this.educationList = this.resumeForm.controls['education'] as FormArray;
-  }
+  ) { }
 
   ngOnInit(): void {
+    if (this.router.url.indexOf('/create-resume') !== -1) {
+      this.resumeForm = this.fb.group({
+        name: ['', Validators.required],
+        email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+        phone: ['', Validators.required],
+        education: this.fb.array([this.edu()])
+      });
+    } else if (this.router.url.indexOf('/edit-resume') !== -1) {
+      this.resumeForm = this.fb.group({
+        name: ['', Validators.required],
+        email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+        phone: ['', Validators.required],
+        education: this.fb.array([], Validators.required)
+      });
+    }
+    this.educationForm = this.resumeForm.controls['education'] as FormArray;
     this.id = this.route.snapshot.params['id'];
 
     if (this.router.url.indexOf('/edit-resume') !== -1 && this.id !== undefined) {
@@ -45,19 +56,21 @@ export class CreateResumeComponent implements OnInit {
 
       let lists = localStorage.getItem('list') || '[]';
       let list = JSON.parse(lists);
-      let editList = list.filter((x: any) => x.id === this.id);
-      if (editList) {
-        const educations = this.resumeForm.get('education') as FormArray;
-        this.resumeForm.controls['name'].setValue(editList[0].name);
-        this.resumeForm.controls['email'].setValue(editList[0].email);
-        this.resumeForm.controls['phone'].setValue(editList[0].phone);
-        this.resumeForm.controls['education'].setValue(editList[0].education);
-        // editList.map((x: any) => {
-        // this.resumeForm.controls['education'].setValue(x.education);
-        // });
-        // this.resumeForm.setValue(editList);
-       // editList.education.forEach((edu: any) => educations.push(this.fb.group(edu)));
-        //editList.education.forEach((edu:any) => educations.push(this.fb.group(edu)));
+      this.editList = list.filter((x: any) => x.id === this.id);
+      if (this.editList) {
+        this.resumeForm.patchValue({
+          name: this.editList[0].name,
+          email: this.editList[0].email,
+          phone: this.editList[0].phone,
+          education: this.editList[0].education.forEach((element: any) => {
+            this.education.push(this.fb.group({
+              task: element.task,
+              startDate: element.startDate,
+              endDate: element.endDate,
+              status: element.status
+            }))
+          })
+        });
       }
     }
   }
@@ -67,7 +80,7 @@ export class CreateResumeComponent implements OnInit {
   }
 
   get education() {
-    return this.resumeForm.controls["education"] as FormArray;
+    return this.resumeForm.controls['education'] as FormArray;
   }
 
   edu(): FormGroup {
@@ -83,12 +96,21 @@ export class CreateResumeComponent implements OnInit {
   }
 
   addEducation() {
-    this.educationList.push(this.edu());
+    let arr = this.fb.group({
+      task: ['', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', [Validators.required, dateValidator]],
+      status: ['']
+    },
+      {
+        validator: dateValidator('startDate', 'endDate')
+      });
+    this.educationForm.push(arr);
   }
 
   educationcon(index: any) {
-    this.educationList = this.resumeForm.get('education') as FormArray;
-    const formGroup = this.educationList.controls[index] as FormGroup;
+    //this.educationForm = this.resumeForm.get('education') as FormArray;
+    const formGroup = this.educationForm.controls[index] as FormGroup;
     return formGroup;
   }
 
@@ -104,23 +126,40 @@ export class CreateResumeComponent implements OnInit {
     }
   }
 
-  createEducation() {
-    this.resumeArr = {
-      id: uuidv4(),
-      name: this.resumeForm.controls['name'].value,
-      email: this.resumeForm.controls['email'].value,
-      phone: this.resumeForm.controls['phone'].value,
-      education: this.resumeForm.controls['education'].value
-    };
-    let resume = localStorage.getItem('list') || '[]';
-    let list = JSON.parse(resume);
-    list.push(this.resumeArr);
-    localStorage.setItem('list', JSON.stringify(list));
-    this.router.navigate(['/resume-list']);
+  createUpdateEducation() {
+    if (this.buttonname == 'Create') {
+      this.resumeArr = {
+        id: uuidv4(),
+        name: this.resumeForm.controls['name'].value,
+        email: this.resumeForm.controls['email'].value,
+        phone: this.resumeForm.controls['phone'].value,
+        education: this.resumeForm.controls['education'].value
+      };
+      let resume = localStorage.getItem('list') || '[]';
+      let list = JSON.parse(resume);
+      list.push(this.resumeArr);
+      localStorage.setItem('list', JSON.stringify(list));
+      this.router.navigate(['/resume-list']);
+    } else if (this.buttonname == 'Update') {
+      this.id = this.route.snapshot.params['id'];
+      let arr = {
+        id: this.id,
+        name: this.resumeForm.controls['name'].value,
+        email: this.resumeForm.controls['email'].value,
+        phone: this.resumeForm.controls['phone'].value,
+        education: this.resumeForm.controls['education'].value
+      };
+      let lists = localStorage.getItem('list') || '[]';
+      let list = JSON.parse(lists);
+      let index = list.findIndex((item: any) => item.id === this.id)
+      list[index] = arr;
+      localStorage.setItem('list', JSON.stringify(list));
+      this.router.navigate(['/resume-list']);
+    }
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    this.formArray = this.resumeForm.controls["education"] as FormArray;
+    this.formArray = this.educationForm;
     const from = event.previousIndex;
     const to = event.currentIndex;
     this.moveItemInFormArray(this.formArray, from, to);
