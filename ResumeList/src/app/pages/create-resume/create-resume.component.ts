@@ -1,8 +1,6 @@
-import { throwDialogContentAlreadyAttachedError } from '@angular/cdk/dialog';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { emitDistinctChangesOnlyDefaultValue } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { dateValidator } from 'src/app/validators/custom-date.validator';
 import { v4 as uuidv4 } from 'uuid';
@@ -133,13 +131,15 @@ export class CreateResumeComponent implements OnInit {
         name: this.resumeForm.controls['name'].value,
         email: this.resumeForm.controls['email'].value,
         phone: this.resumeForm.controls['phone'].value,
-        education: this.resumeForm.controls['education'].value
+        education: this.resumeForm.controls['education'].value,
+        createdAt: new Date()
       };
       let resume = localStorage.getItem('list') || '[]';
       let list = JSON.parse(resume);
       list.push(this.resumeArr);
       localStorage.setItem('list', JSON.stringify(list));
       this.router.navigate(['/resume-list']);
+
     } else if (this.buttonname == 'Update') {
       this.id = this.route.snapshot.params['id'];
       let arr = {
@@ -147,7 +147,8 @@ export class CreateResumeComponent implements OnInit {
         name: this.resumeForm.controls['name'].value,
         email: this.resumeForm.controls['email'].value,
         phone: this.resumeForm.controls['phone'].value,
-        education: this.resumeForm.controls['education'].value
+        education: this.resumeForm.controls['education'].value,
+        createdAt: new Date()
       };
       let lists = localStorage.getItem('list') || '[]';
       let list = JSON.parse(lists);
@@ -156,6 +157,14 @@ export class CreateResumeComponent implements OnInit {
       localStorage.setItem('list', JSON.stringify(list));
       this.router.navigate(['/resume-list']);
     }
+
+    // if(this.resumeForm.valid){
+    //   this.resumeForm.controls['name'].disable();
+    //   this.resumeForm.controls['email'].disable();
+    //   this.resumeForm.controls['phone'].disable();
+    //   this.resumeForm.controls['education'].disable();
+    //   this.confirmView = true;
+    // }
   }
 
   drop(event: CdkDragDrop<string[]>) {
