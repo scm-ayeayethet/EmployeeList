@@ -1,41 +1,56 @@
-.container {
-    width: 60%;
-    margin: 30px auto;
+.wrapper {
 
-    .title{
-        text-align: center;
+    button {
+        margin: 20px 30px 0 30px;
     }
 
-    .table-container {
-        width: 100%;
+    .container {
+        width: 80%;
+        margin: 30px auto;
+        font-size: 16px;
+        box-sizing: border-box;
+        border-radius: 4px;
+        box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+            0 8px 10px 1px rgba(0, 0, 0, 0.14),
+            0 3px 14px 2px rgba(0, 0, 0, 0.12);
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border-radius: 1em;
-            border-radius: 5px;
+        .info {
+            padding: 50px 70px 0 70px;
 
-            th {
-                padding: 5px 0;
-                text-align: center;
-                background-color: #8a2be2;
+            .name {
+                font-size: 30px;
+            }
+        }
+
+        .about {
+            width: 95%;
+            margin: 0 auto;
+            background-color: #000000;
+
+            p {
+                padding: 30px 50px;
                 color: #ffffff;
             }
-
-            td {
-                padding: 5px 0;
-                text-align: center;
-            }
         }
 
-        .edit-btn{
-           display: flex;
-           justify-content: center;
+        .education {
+            width: 95%;
+            margin: 0 auto;
+            background-color: rgb(128, 128, 128);
 
-            .btn{
-                padding: 0px 80px;
-                margin-top: 25px;
+
+            .edu-title {
+                font-size: 22px;
+                padding: 30px 50px 10px 50px;
             }
+
+            .edu-content {
+                padding: 0px 50px 20px 50px;
+
+            }
+
+
         }
+
     }
 }

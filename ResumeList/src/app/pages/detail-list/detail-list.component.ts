@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-detail-list',
@@ -13,6 +15,7 @@ export class DetailListComponent implements OnInit {
   displayedColumns: string[] = ['task', 'startDate', 'endDate', 'status'];
   lists: any;
   list: any;
+  public task: any;
   public arr: any;
 
   constructor(private route: ActivatedRoute) { }
@@ -23,9 +26,13 @@ export class DetailListComponent implements OnInit {
     this.list = JSON.parse(this.lists);
     this.arr = this.list.filter((x: any) => id == x.id);
     console.log(this.arr)
-    this.arr.map((x: any) => {
-      this.dataSource = new MatTableDataSource(x.education);
+    this.task = this.arr.map((x: any) => {
+      return x.education;
     });
+    console.log(this.task)
+  }
+
+  downloadPDF() {
   }
 
 }
