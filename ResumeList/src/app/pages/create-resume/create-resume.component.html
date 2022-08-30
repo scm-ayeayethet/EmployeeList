@@ -22,8 +22,7 @@
             <div class="extra">
                 <mat-label>Phone: </mat-label>
                 <mat-form-field class="form-group" appearance="outline">
-                    <input matInput type="text" formControlName="phone" (keypress)="keyPress($event)"
-                        placeholder="Phone">
+                    <input matInput type="text" formControlName="phone" appAllownumbersonly placeholder="Phone">
                     <mat-error *ngIf="myForm['phone'].hasError('required')">Phone is required</mat-error>
                 </mat-form-field>
             </div>
