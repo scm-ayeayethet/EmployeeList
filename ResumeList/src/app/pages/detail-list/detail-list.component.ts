@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-detail-list',
@@ -11,8 +9,6 @@ import html2canvas from 'html2canvas';
 })
 export class DetailListComponent implements OnInit {
 
-  dataSource !: MatTableDataSource<any>;
-  displayedColumns: string[] = ['task', 'startDate', 'endDate', 'status'];
   lists: any;
   list: any;
   public task: any;
@@ -25,14 +21,12 @@ export class DetailListComponent implements OnInit {
     this.lists = localStorage.getItem('list') || '[]';
     this.list = JSON.parse(this.lists);
     this.arr = this.list.filter((x: any) => id == x.id);
-    console.log(this.arr)
     this.task = this.arr.map((x: any) => {
       return x.education;
     });
-    console.log(this.task)
   }
 
   downloadPDF() {
+    window.print();
   }
-
 }

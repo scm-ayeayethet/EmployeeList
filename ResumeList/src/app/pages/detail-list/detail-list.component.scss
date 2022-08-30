@@ -1,56 +1,52 @@
-.wrapper {
+@media print {
 
     button {
-        margin: 20px 30px 0 30px;
+        display: none
+    }
+}
+
+button {
+    margin: 20px 30px 0 30px;
+}
+
+.container {
+    width: 100%;
+    // margin: 30px auto;
+    font-size: 16px;
+
+    .info {
+        padding: 50px 70px 0 70px;
+        margin: 0 auto;
+
+        .name {
+            font-size: 30px;
+        }
     }
 
-    .container {
-        width: 80%;
-        margin: 30px auto;
-        font-size: 16px;
-        box-sizing: border-box;
-        border-radius: 4px;
-        box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-            0 8px 10px 1px rgba(0, 0, 0, 0.14),
-            0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    .about {
+        width: 95%;
+        margin: 0 auto;
+        background-color: #000000;
 
-        .info {
-            padding: 50px 70px 0 70px;
+        p {
+            padding: 30px 50px;
+            color: #ffffff;
+        }
+    }
 
-            .name {
-                font-size: 30px;
-            }
+    .education {
+        width: 95%;
+        margin: 0 auto;
+        background-color: #808080;
+
+        .edu-title {
+            font-size: 22px;
+            padding: 30px 50px 10px 50px;
         }
 
-        .about {
-            width: 95%;
-            margin: 0 auto;
-            background-color: #000000;
-
-            p {
-                padding: 30px 50px;
-                color: #ffffff;
-            }
-        }
-
-        .education {
-            width: 95%;
-            margin: 0 auto;
-            background-color: rgb(128, 128, 128);
-
-
-            .edu-title {
-                font-size: 22px;
-                padding: 30px 50px 10px 50px;
-            }
-
-            .edu-content {
-                padding: 0px 50px 20px 50px;
-
-            }
-
+        .edu-content {
+            padding: 0px 50px 20px 50px;
 
         }
-
     }
 }
